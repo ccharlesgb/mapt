@@ -5,6 +5,7 @@ import 'rmwc/dist/styles'
 import autoBind from 'react-autobind';
 import './Sidebar.css'
 import {ListOnActionEventT} from "@rmwc/list/dist/list";
+import {LayerGroup} from "./LayerList";
 
 type SidebarState = {}
 
@@ -29,13 +30,16 @@ class Sidebar extends React.Component<SidebarProps, SidebarState> {
                     <DrawerContent>
                         <List onAction={this.props.onUploadClicked}>
                             <ListItem>
-                                <ListItemGraphic icon="add" />
+                                <ListItemGraphic icon="add"/>
                                 <ListItemText>
                                     Upload Data
                                 </ListItemText>
                             </ListItem>
                         </List>
                         <ListDivider/>
+                        <LayerGroup label={"Test"} icon={"favourite"} layers={[{id: 1, label: "test", active: false}]}>
+
+                        </LayerGroup>
                         <CollapsibleList
                             handle={<SimpleListItem text="Favourites" graphic="favorite" metaIcon="chevron_right"/>}>
                             <SimpleListItem text="First"/>
