@@ -24,3 +24,13 @@ services:
     volumes:
       - ./backend/app/:/usr/app/app
       - ./backend/requirements.txt:/usr/app/requirements.txt
+
+  db:
+    image: kartoza/postgis:12.1
+    ports:
+      - "5432:5432"
+
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=admin
+      - POSTGRES_DBNAME=mapt
