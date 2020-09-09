@@ -1,1 +1,1 @@
-declare module 'react-autobind'
+declare module "react-autobind";

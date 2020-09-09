@@ -1,8 +1,9 @@
-from fastapi import FastAPI
 from app.api import router
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 origins = ["http://localhost:3000"]
+
 
 def create_app():
     app = FastAPI()

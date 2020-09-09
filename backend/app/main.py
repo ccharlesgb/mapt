@@ -1,7 +1,8 @@
 import os
+
 import click
-from app.core.factory import create_app
 import uvicorn
+from app.core.factory import create_app
 
 
 @click.group()
