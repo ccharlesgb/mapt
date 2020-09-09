@@ -37,9 +37,6 @@ class Sidebar extends React.Component<SidebarProps, SidebarState> {
                             </ListItem>
                         </List>
                         <ListDivider/>
-                        <LayerGroup label={"Test"} icon={"favourite"} layers={[{id: 1, label: "test", active: false}]}>
-
-                        </LayerGroup>
                         <CollapsibleList
                             handle={<SimpleListItem text="Favourites" graphic="favorite" metaIcon="chevron_right"/>}>
                             <SimpleListItem text="First"/>
@@ -51,21 +48,7 @@ class Sidebar extends React.Component<SidebarProps, SidebarState> {
                             <SimpleListItem text="Second"/>
                         </CollapsibleList>
                         <ListDivider/>
-                        <CollapsibleList
-                            handle={<SimpleListItem text="Boundaries" graphic="subject" metaIcon="chevron_right"/>}>
-                            <SimpleListItem text="First"/>
-                            <SimpleListItem text="Second"/>
-                        </CollapsibleList>
-                        <CollapsibleList
-                            handle={<SimpleListItem text="Census" graphic="subject" metaIcon="chevron_right"/>}>
-                            <SimpleListItem text="First"/>
-                            <SimpleListItem text="Second"/>
-                        </CollapsibleList>
-                        <CollapsibleList
-                            handle={<SimpleListItem text="Transport" graphic="subject" metaIcon="chevron_right"/>}>
-                            <SimpleListItem text="First"/>
-                            <SimpleListItem text="Second"/>
-                        </CollapsibleList>
+                        <LayerGroup label={"Test"} icon={"subject"}/>
                     </DrawerContent>
                 </Drawer>
             </React.Fragment>

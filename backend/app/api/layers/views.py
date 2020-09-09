@@ -20,6 +20,7 @@ def get_fake_layers() -> List[Layer]:
     for group in test_groups:
         for i in range(0, 3):
             layers.append(Layer(id=index, group=group, label=f"Layer{index}"))
+            index += 1
     return layers
 
 
