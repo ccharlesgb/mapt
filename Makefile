@@ -36,3 +36,11 @@ lint:
 .PHONY: alembic-revision
 alembic-revision:
 	docker-compose run -w '/usr/app/app' backend sh -c 'alembic revision --auto -m "${label}"'
+
+.PHONY: alembic-upgrade
+alembic-upgrade:
+	docker-compose run -w '/usr/app/app' backend sh -c 'alembic upgrade head'
+
+.PHONY: alembic
+alembic:
+	docker-compose run -w '/usr/app/app' backend sh -c 'alembic ${command}'
