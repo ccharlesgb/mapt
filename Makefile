@@ -32,3 +32,7 @@ run-stack:
 .PHONY: lint
 lint:
 	pre-commit run --all-files
+
+.PHONY: alembic-revision
+alembic-revision:
+	docker-compose run -w '/usr/app/app' backend sh -c 'alembic revision --auto -m "${label}"'

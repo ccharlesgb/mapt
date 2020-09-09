@@ -27,6 +27,8 @@ class Config(BaseSettings):
                 return v
         raise ValueError(f"Level name is {level}")
 
+    database_uri: str
+
     class Config:
         env_prefix = _env_prefix
 
@@ -45,6 +47,7 @@ _configs: Dict[str, Type[Config]] = {
 
 
 def get_config_from_environment() -> Config:
+    print(os.environ)
     env_key = f"{_env_prefix.upper()}APP_ENV"
     try:
         app_env = os.environ[env_key]
