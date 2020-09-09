@@ -1,5 +1,3 @@
-import os
-
 import click
 import uvicorn
 from app.core.factory import create_app
