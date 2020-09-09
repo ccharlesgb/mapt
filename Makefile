@@ -11,11 +11,24 @@ regen-openapi-client:
 .PHONY: yarn-add
 yarn-add:
 	docker-compose run frontend sh -c 'yarn add ${package}'
+	yarn install # Update the local node_modules as well
 	docker-compose build
+
+.PHONE: setup
+setup:
+	yarn install
+	yarn --cwd frontend install
+	cd ..
+	touch frontend/.env
+	touch backend/.env
+	docker-compose build
+	pre-commit install
+
 
 .PHONY: run-stack
 run-stack:
 	docker-compose up
 
-.PHONE: test-frontend
-test-frontend:
+.PHONY: lint
+lint:
+	pre-commit run --all-files

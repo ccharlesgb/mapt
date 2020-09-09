@@ -21,11 +21,11 @@ repos:
     rev: "2.1.1" # Use the sha or tag you want to point at
     hooks:
       - id: prettier
-    language_version: v14.8.0
+        language_version: 14.8.0
 
   - repo: https://github.com/pre-commit/mirrors-eslint
     files: \.[jt]sx?$ # *.js, *.jsx, *.ts and *.tsx
     rev: v7.8.1 # Use the sha / tag you want to point at
     hooks:
       - id: eslint
-    language_version: v14.8.0
+        language_version: 14.8.0
