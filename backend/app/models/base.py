@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Column, Integer, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -15,4 +17,7 @@ class IntKeyMixin:
 
 
 metadata = MetaData(schema="mapt", naming_convention=convention)
-Base = declarative_base(metadata=metadata)
+if TYPE_CHECKING:
+    Base = object
+else:
+    Base = declarative_base(metadata=metadata)

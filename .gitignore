@@ -69,3 +69,7 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+# For test shape files and such
+data

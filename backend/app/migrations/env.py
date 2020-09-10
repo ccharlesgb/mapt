@@ -1,13 +1,13 @@
 # flake8: noqa
 from logging.config import fileConfig
+from typing import Optional
 
 from alembic import context
 from app.core.config import get_config_from_environment
 from app.models.base import metadata
-from sqlalchemy import create_engine, engine_from_config, pool
+from sqlalchemy import create_engine, pool
+from sqlalchemy.sql.schema import SchemaItem
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
 config = context.config
 
 # Interpret the config file for Python logging.
@@ -27,12 +27,17 @@ target_metadata = metadata
 # ... etc.
 
 
-def include_object(object, name, type_, reflected, compare_to):
-    print(object, name, type_)
+def include_object(
+    object: SchemaItem,
+    name: str,
+    type_: str,
+    reflected: bool,
+    compare_to: Optional[SchemaItem],
+) -> bool:
     return type_ != "table" or object.schema == "mapt"
 
 
-def run_migrations_offline():
+def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
     This configures the context with just a URL
@@ -59,7 +64,7 @@ def run_migrations_offline():
         context.run_migrations()
 
 
-def run_migrations_online():
+def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
     In this scenario we need to create an Engine

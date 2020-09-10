@@ -16,7 +16,7 @@ def create_db(uri: str) -> Engine:
     return engine
 
 
-def create_app(config_override: Optional[config.Config] = None):
+def create_app(config_override: Optional[config.Config] = None) -> FastAPI:
     if config_override is not None:
         app_config = config_override
     else:

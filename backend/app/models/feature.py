@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from .base import Base, IntKeyMixin
 
 
-class Feature(Base, IntKeyMixin):
+class Feature(IntKeyMixin, Base):
     """
     Stores the raw shape file information
     """

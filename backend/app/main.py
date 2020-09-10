@@ -4,13 +4,13 @@ from app.core.factory import create_app
 
 
 @click.group()
-def cli():
+def cli() -> None:
     pass
 
 
 @cli.command()
 @click.option("--reload", is_flag=True)
-def run(reload=False):
+def run(reload: bool = False) -> None:
     if reload:
         uvicorn.run("app.importable_app:app", host="0.0.0.0", port=8000, reload=True)
     else:

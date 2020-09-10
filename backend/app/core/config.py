@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Dict, Type
+from typing import Any, Dict, List, Type, Union
 
 from pydantic import BaseSettings, validator
 
@@ -15,7 +15,9 @@ class Config(BaseSettings):
     description: str = "Shape file uploader/sharing application"
 
     @validator("root_log_level")
-    def is_logging_level(cls, v, values, **kwargs) -> int:
+    def is_logging_level(
+        cls, v: Union[str, int], values: List[str], **kwargs: Dict[str, Any]
+    ) -> int:
         # Weird function it returns the integer repr if it is valid.
         # If you supply it a valid integer like logging.DEBUG it returns the string "DEBUG"
         # Otherwise it returns f"Level {v}" if it isn't valid
@@ -24,7 +26,7 @@ class Config(BaseSettings):
             return level
         elif isinstance(level, str):
             if not level.startswith("Level "):
-                return v
+                return int(v)
         raise ValueError(f"Level name is {level}")
 
     database_uri: str
