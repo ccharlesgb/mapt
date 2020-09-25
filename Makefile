@@ -1,3 +1,7 @@
+.PHONY: run-stack
+run-stack:
+	docker-compose up
+
 .PHONY: pip-install
 pip-install:
 	docker-compose run backend sh -c 'pip3 install ${package} && pip freeze > requirements.txt'
@@ -23,11 +27,6 @@ setup:
 	touch backend/.env
 	docker-compose build
 	pre-commit install
-
-
-.PHONY: run-stack
-run-stack:
-	docker-compose up
 
 .PHONY: lint
 lint:

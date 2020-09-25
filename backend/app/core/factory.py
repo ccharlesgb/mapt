@@ -1,19 +1,15 @@
+import logging
 from typing import Optional
 
 from app.api import router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine
-from sqlalchemy.engine import Engine
 
 from . import config
+from .database import Database
+from .klass import MaptAPI
 
 origins = ["http://localhost:3000"]
-
-
-def create_db(uri: str) -> Engine:
-    engine = create_engine(uri)
-    return engine
 
 
 def create_app(config_override: Optional[config.Config] = None) -> FastAPI:
@@ -21,9 +17,11 @@ def create_app(config_override: Optional[config.Config] = None) -> FastAPI:
         app_config = config_override
     else:
         app_config = config.get_config_from_environment()
-    app = FastAPI(title=app_config.title, description=app_config.description)
+    app = MaptAPI(title=app_config.title, description=app_config.description)
     app.config = app_config
-    app.engine = create_db(app_config.database_uri)
+    setup_logging(app)
+    setup_db(app)
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
@@ -34,3 +32,28 @@ def create_app(config_override: Optional[config.Config] = None) -> FastAPI:
 
     app.include_router(router)
     return app
+
+
+def setup_logging(app: MaptAPI) -> None:
+    root = logging.getLogger()
+    root.handlers = []
+    formatter = logging.Formatter(
+        "%(asctime)s - %(process)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(app.config.root_log_level)
+    stream_handler.setFormatter(formatter)
+    root.addHandler(stream_handler)
+    root.setLevel(app.config.root_log_level)
+
+
+def setup_db(app: MaptAPI) -> None:
+    app.database = Database(app.config.database_uri)
+
+    @app.on_event("startup")
+    def connect_to_db() -> None:
+        app.database.connect()
+
+    @app.on_event("shutdown")
+    def disconnect_from_db() -> None:
+        app.database.disconnect()
