@@ -9,7 +9,7 @@ _env_prefix = "mapt_"
 
 class Config(BaseSettings):
     app_env: str
-    root_log_level: int = logging.DEBUG
+    root_log_level: int = logging.INFO
 
     title: str = "Mapt"
     description: str = "Shape file uploader/sharing application"

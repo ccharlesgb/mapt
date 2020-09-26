@@ -12,10 +12,13 @@ class Feature(IntKeyMixin, Base):
     """
 
     __tablename__ = "features"
-    dataset_id = Column(Integer(), ForeignKey("Dataset.id"), index=True)
+    dataset_id = Column(Integer(), ForeignKey("datasets.id"), index=True)
     attributes = Column(JSONB())
-    geometry = Column(Geometry(srid=3850), index=True)
+    geometry = Column(Geometry(srid=3850))
 
-    __table_args__ = (Index("ix_attributes", attributes, postgresql_using="gin"),)
+    __table_args__ = (
+        Index("ix_attributes", attributes, postgresql_using="gin"),
+        Index("ix_geometry", geometry, postgresql_using="gist"),
+    )
 
     dataset = relationship("Dataset", uselist=False, back_populates="features")

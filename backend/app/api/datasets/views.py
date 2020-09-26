@@ -12,13 +12,11 @@ class ShapeUploaded(BaseModel):
 
 
 @router.post("/shapes/", response_model=ShapeUploaded)
-async def upload_shape(
-    request: Request, shape_file: UploadFile = File(...)
-) -> ShapeUploaded:
+def upload_shape(request: Request, shape_file: UploadFile = File(...)) -> ShapeUploaded:
     """
     Upload a new shape file
     """
-    contents = await shape_file.read()
+    contents = shape_file.file.read()
     with request.app.database.session_scope() as session:
         upload_shapefile(session, shape_file.filename, contents)
     return ShapeUploaded(dataset_href="/datasets/1", file_size=len(contents))

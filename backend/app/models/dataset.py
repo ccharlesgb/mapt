@@ -10,6 +10,8 @@ class Dataset(IntKeyMixin, Base):
     Stores the metadata for a set of features
     """
 
+    __tablename__ = "datasets"
+
     label = Column(String(256), nullable=False, index=True)
     description = Column(String(), nullable=False, index=True)
     schema = Column(JSONB(), nullable=False)
