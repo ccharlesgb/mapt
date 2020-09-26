@@ -1,4 +1,4 @@
-from app.core.datasets import upload_shapefile
+from app.core.datasets.operations import upload_shapefile
 from fastapi import APIRouter, File, UploadFile
 from pydantic import BaseModel
 from starlette.requests import Request

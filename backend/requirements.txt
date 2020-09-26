@@ -1,4 +1,7 @@
+aioredis==1.3.1
 alembic==1.4.2
+arq==0.19
+async-timeout==3.0.1
 attrs==20.2.0
 click==7.1.2
 click-plugins==1.1.1
@@ -7,6 +10,7 @@ fastapi==0.61.1
 Fiona==1.8.17
 GeoAlchemy2==0.8.4
 h11==0.9.0
+hiredis==1.1.0
 httptools==0.1.1
 Mako==1.1.3
 MarkupSafe==1.1.1

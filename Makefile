@@ -2,6 +2,10 @@
 run-stack:
 	docker-compose up
 
+.PHONY: docker-build
+docker-build:
+	docker-compose build
+
 .PHONY: pip-install
 pip-install:
 	docker-compose run backend sh -c 'pip3 install ${package} && pip freeze > requirements.txt'

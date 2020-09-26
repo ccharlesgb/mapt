@@ -31,6 +31,9 @@ class Config(BaseSettings):
 
     database_uri: str
 
+    redis_host: str
+    redis_db: int
+
     class Config:
         env_prefix = _env_prefix
 
@@ -41,6 +44,9 @@ class ConfigLocal(Config):
     """
 
     app_env: str = "local"
+
+    redis_host = "redis"
+    redis_db = 0
 
 
 _configs: Dict[str, Type[Config]] = {
@@ -63,3 +69,16 @@ def get_config_from_environment() -> Config:
             f"FATAL!!! Could ont determine configuration from {env_key}={app_env}"
         )
     return config_klass()
+
+
+def setup_logging(config: Config) -> None:
+    root = logging.getLogger()
+    root.handlers = []
+    formatter = logging.Formatter(
+        "%(asctime)s - %(process)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(config.root_log_level)
+    stream_handler.setFormatter(formatter)
+    root.addHandler(stream_handler)
+    root.setLevel(config.root_log_level)
