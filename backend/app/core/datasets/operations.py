@@ -1,4 +1,5 @@
 import logging
+from typing import List, Tuple
 
 import fiona
 from app import models
@@ -16,7 +17,9 @@ class InvalidShapeFileError(Exception):
     """
 
 
-def upload_shapefile(session: Session, filename: str, contents: bytes) -> int:
+def parse_shapefile(
+    filename: str, contents: bytes
+) -> Tuple[models.Dataset, List[models.Feature]]:
     with fiona.BytesCollection(contents) as col:
         if col.driver != "ESRI Shapefile":
             raise InvalidShapeFileError(
@@ -32,7 +35,9 @@ def upload_shapefile(session: Session, filename: str, contents: bytes) -> int:
             attributes = feature["properties"]
             geometry = shape(feature["geometry"])
             if not geometry.is_valid:
-                raise ValueError(f"Geometry from file '{filename}' is invalid")
+                raise InvalidShapeFileError(
+                    f"Geometry from file '{filename}' is invalid"
+                )
 
             feature = models.Feature(
                 attributes=attributes,
@@ -40,7 +45,12 @@ def upload_shapefile(session: Session, filename: str, contents: bytes) -> int:
                 dataset=dataset_row,
             )
             feature_rows.append(feature)
-        logger.info(f"Uploading {len(feature_rows)} features from '{filename}'")
-        session.add_all(feature_rows)
-        session.flush()
-    return dataset_row.id
+    return dataset_row, feature_rows
+
+
+def upload_shapefile(session: Session, filename: str, contents: bytes) -> int:
+    dataset, feature_rows = parse_shapefile(filename, contents)
+    logger.info(f"Uploading {len(feature_rows)} features from '{filename}'")
+    session.add_all(feature_rows)
+    session.flush()
+    return dataset.id

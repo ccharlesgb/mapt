@@ -47,3 +47,7 @@ alembic-upgrade:
 .PHONY: alembic
 alembic:
 	docker-compose run -w '/usr/app/app' backend sh -c 'alembic ${command}'
+
+.PHONY: test-backend
+test-backend:
+	docker-compose run backend sh -c 'python -m pytest tests'
