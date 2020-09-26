@@ -27,15 +27,65 @@ import {
 /**
  *
  * @export
- * @interface BodyUploadShapeDatasetsShapesPost
+ * @interface Attribute
  */
-export interface BodyUploadShapeDatasetsShapesPost {
+export interface Attribute {
+  /**
+   *
+   * @type {string}
+   * @memberof Attribute
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Attribute
+   */
+  display: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Attribute
+   */
+  type: string;
+}
+/**
+ *
+ * @export
+ * @interface BodyUploadShapeDatasetsShapefilePost
+ */
+export interface BodyUploadShapeDatasetsShapefilePost {
   /**
    *
    * @type {any}
-   * @memberof BodyUploadShapeDatasetsShapesPost
+   * @memberof BodyUploadShapeDatasetsShapefilePost
    */
   shape_file: any;
+}
+/**
+ *
+ * @export
+ * @interface Dataset
+ */
+export interface Dataset {
+  /**
+   *
+   * @type {string}
+   * @memberof Dataset
+   */
+  label: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Dataset
+   */
+  description: string;
+  /**
+   *
+   * @type {Array<Attribute>}
+   * @memberof Dataset
+   */
+  schema: Array<Attribute>;
 }
 /**
  *
@@ -87,12 +137,6 @@ export interface ShapeUploaded {
    * @memberof ShapeUploaded
    */
   dataset_href: string;
-  /**
-   *
-   * @type {number}
-   * @memberof ShapeUploaded
-   */
-  file_size: number;
 }
 /**
  *
@@ -128,6 +172,104 @@ export const DefaultApiAxiosParamCreator = function (
   configuration?: Configuration
 ) {
   return {
+    /**
+     *
+     * @summary Get All Datasets
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getAllDatasetsDatasetsGet: async (
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/datasets/`;
+      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarUrlObj.query = {
+        ...localVarUrlObj.query,
+        ...localVarQueryParameter,
+        ...options.query,
+      };
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: globalImportUrl.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Get Dataset
+     * @param {number} datasetId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getDatasetDatasetsDatasetIdGet: async (
+      datasetId: number,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'datasetId' is not null or undefined
+      if (datasetId === null || datasetId === undefined) {
+        throw new RequiredError(
+          "datasetId",
+          "Required parameter datasetId was null or undefined when calling getDatasetDatasetsDatasetIdGet."
+        );
+      }
+      const localVarPath = `/datasets/{dataset_id}`.replace(
+        `{${"dataset_id"}}`,
+        encodeURIComponent(String(datasetId))
+      );
+      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarUrlObj.query = {
+        ...localVarUrlObj.query,
+        ...localVarQueryParameter,
+        ...options.query,
+      };
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: globalImportUrl.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
     /**
      *
      * @summary Get Layers
@@ -170,13 +312,13 @@ export const DefaultApiAxiosParamCreator = function (
       };
     },
     /**
-     * Upload a new shape file
+     * Upload a new shape file  This will eventually be offloaded to the ARQ worker but keep it simple for now and do it synchronously
      * @summary Upload Shape
      * @param {any} shapeFile
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    uploadShapeDatasetsShapesPost: async (
+    uploadShapeDatasetsShapefilePost: async (
       shapeFile: any,
       options: any = {}
     ): Promise<RequestArgs> => {
@@ -184,10 +326,10 @@ export const DefaultApiAxiosParamCreator = function (
       if (shapeFile === null || shapeFile === undefined) {
         throw new RequiredError(
           "shapeFile",
-          "Required parameter shapeFile was null or undefined when calling uploadShapeDatasetsShapesPost."
+          "Required parameter shapeFile was null or undefined when calling uploadShapeDatasetsShapefilePost."
         );
       }
-      const localVarPath = `/datasets/shapes/`;
+      const localVarPath = `/datasets/shapefile/`;
       const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
       let baseOptions;
       if (configuration) {
@@ -240,6 +382,58 @@ export const DefaultApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @summary Get All Datasets
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getAllDatasetsDatasetsGet(
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Dataset>>
+    > {
+      const localVarAxiosArgs = await DefaultApiAxiosParamCreator(
+        configuration
+      ).getAllDatasetsDatasetsGet(options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
+     *
+     * @summary Get Dataset
+     * @param {number} datasetId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getDatasetDatasetsDatasetIdGet(
+      datasetId: number,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Dataset>
+    > {
+      const localVarAxiosArgs = await DefaultApiAxiosParamCreator(
+        configuration
+      ).getDatasetDatasetsDatasetIdGet(datasetId, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
+     *
      * @summary Get Layers
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -264,13 +458,13 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       };
     },
     /**
-     * Upload a new shape file
+     * Upload a new shape file  This will eventually be offloaded to the ARQ worker but keep it simple for now and do it synchronously
      * @summary Upload Shape
      * @param {any} shapeFile
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async uploadShapeDatasetsShapesPost(
+    async uploadShapeDatasetsShapefilePost(
       shapeFile: any,
       options?: any
     ): Promise<
@@ -278,7 +472,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs = await DefaultApiAxiosParamCreator(
         configuration
-      ).uploadShapeDatasetsShapesPost(shapeFile, options);
+      ).uploadShapeDatasetsShapefilePost(shapeFile, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -305,6 +499,32 @@ export const DefaultApiFactory = function (
   return {
     /**
      *
+     * @summary Get All Datasets
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getAllDatasetsDatasetsGet(options?: any): AxiosPromise<Array<Dataset>> {
+      return DefaultApiFp(configuration)
+        .getAllDatasetsDatasetsGet(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Get Dataset
+     * @param {number} datasetId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getDatasetDatasetsDatasetIdGet(
+      datasetId: number,
+      options?: any
+    ): AxiosPromise<Dataset> {
+      return DefaultApiFp(configuration)
+        .getDatasetDatasetsDatasetIdGet(datasetId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Get Layers
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -315,18 +535,18 @@ export const DefaultApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * Upload a new shape file
+     * Upload a new shape file  This will eventually be offloaded to the ARQ worker but keep it simple for now and do it synchronously
      * @summary Upload Shape
      * @param {any} shapeFile
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    uploadShapeDatasetsShapesPost(
+    uploadShapeDatasetsShapefilePost(
       shapeFile: any,
       options?: any
     ): AxiosPromise<ShapeUploaded> {
       return DefaultApiFp(configuration)
-        .uploadShapeDatasetsShapesPost(shapeFile, options)
+        .uploadShapeDatasetsShapefilePost(shapeFile, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -341,6 +561,33 @@ export const DefaultApiFactory = function (
 export class DefaultApi extends BaseAPI {
   /**
    *
+   * @summary Get All Datasets
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getAllDatasetsDatasetsGet(options?: any) {
+    return DefaultApiFp(this.configuration)
+      .getAllDatasetsDatasetsGet(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Get Dataset
+   * @param {number} datasetId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getDatasetDatasetsDatasetIdGet(datasetId: number, options?: any) {
+    return DefaultApiFp(this.configuration)
+      .getDatasetDatasetsDatasetIdGet(datasetId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
    * @summary Get Layers
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -353,16 +600,16 @@ export class DefaultApi extends BaseAPI {
   }
 
   /**
-   * Upload a new shape file
+   * Upload a new shape file  This will eventually be offloaded to the ARQ worker but keep it simple for now and do it synchronously
    * @summary Upload Shape
    * @param {any} shapeFile
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public uploadShapeDatasetsShapesPost(shapeFile: any, options?: any) {
+  public uploadShapeDatasetsShapefilePost(shapeFile: any, options?: any) {
     return DefaultApiFp(this.configuration)
-      .uploadShapeDatasetsShapesPost(shapeFile, options)
+      .uploadShapeDatasetsShapefilePost(shapeFile, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }

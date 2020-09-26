@@ -12,7 +12,11 @@ class Feature(IntKeyMixin, Base):
     """
 
     __tablename__ = "features"
-    dataset_id = Column(Integer(), ForeignKey("datasets.id"), index=True)
+    dataset_id = Column(
+        Integer(),
+        ForeignKey("datasets.id", ondelete="CASCADE", onupdate="CASCADE"),
+        index=True,
+    )
     attributes = Column(JSONB())
     geometry = Column(Geometry(srid=3850))
 

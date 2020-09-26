@@ -26,16 +26,16 @@
         }
       }
     },
-    "/datasets/shapes/": {
+    "/datasets/shapefile/": {
       "post": {
         "summary": "Upload Shape",
-        "description": "Upload a new shape file",
-        "operationId": "upload_shape_datasets_shapes__post",
+        "description": "Upload a new shape file\n\nThis will eventually be offloaded to the ARQ worker but keep it simple for now and do it synchronously",
+        "operationId": "upload_shape_datasets_shapefile__post",
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Body_upload_shape_datasets_shapes__post"
+                "$ref": "#/components/schemas/Body_upload_shape_datasets_shapefile__post"
               }
             }
           },
@@ -60,12 +60,74 @@
           }
         }
       }
+    },
+    "/datasets/{dataset_id}": {
+      "get": {
+        "summary": "Get Dataset",
+        "operationId": "get_dataset_datasets__dataset_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": { "title": "Dataset Id", "type": "integer" },
+            "name": "dataset_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Dataset" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/datasets/": {
+      "get": {
+        "summary": "Get All Datasets",
+        "operationId": "get_all_datasets_datasets__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get All Datasets Datasets  Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Dataset" }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "Body_upload_shape_datasets_shapes__post": {
-        "title": "Body_upload_shape_datasets_shapes__post",
+      "Attribute": {
+        "title": "Attribute",
+        "required": ["name", "display", "type"],
+        "type": "object",
+        "properties": {
+          "name": { "title": "Name", "type": "string" },
+          "display": { "title": "Display", "type": "string" },
+          "type": { "title": "Type", "type": "string" }
+        }
+      },
+      "Body_upload_shape_datasets_shapefile__post": {
+        "title": "Body_upload_shape_datasets_shapefile__post",
         "required": ["shape_file"],
         "type": "object",
         "properties": {
@@ -73,6 +135,20 @@
             "title": "Shape File",
             "type": "string",
             "format": "binary"
+          }
+        }
+      },
+      "Dataset": {
+        "title": "Dataset",
+        "required": ["label", "description", "schema"],
+        "type": "object",
+        "properties": {
+          "label": { "title": "Label", "type": "string" },
+          "description": { "title": "Description", "type": "string" },
+          "schema": {
+            "title": "Schema",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Attribute" }
           }
         }
       },
@@ -99,11 +175,10 @@
       },
       "ShapeUploaded": {
         "title": "ShapeUploaded",
-        "required": ["dataset_href", "file_size"],
+        "required": ["dataset_href"],
         "type": "object",
         "properties": {
-          "dataset_href": { "title": "Dataset Href", "type": "string" },
-          "file_size": { "title": "File Size", "type": "number" }
+          "dataset_href": { "title": "Dataset Href", "type": "string" }
         }
       },
       "ValidationError": {

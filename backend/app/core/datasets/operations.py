@@ -1,11 +1,13 @@
 import logging
-from typing import List, Tuple
+from typing import Any, Dict, List, Tuple
 
 import fiona
 from app import models
+from app.core.exc import DatasetNotFoundError
 from geoalchemy2.shape import from_shape
 from shapely.geometry import shape
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.exc import NoResultFound
 
 logger = logging.getLogger("__name__")
 logger.addHandler(logging.NullHandler())
@@ -17,6 +19,14 @@ class InvalidShapeFileError(Exception):
     """
 
 
+def parse_schema(schema: Dict[str, Any]) -> List[Dict[str, Any]]:
+    attributes = []
+    for field, type_ in schema.items():
+        datatype, parameter = type_.split(":")
+        attributes.append({"name": field, "display": field.title(), "type": datatype})
+    return attributes
+
+
 def parse_shapefile(
     filename: str, contents: bytes
 ) -> Tuple[models.Dataset, List[models.Feature]]:
@@ -25,10 +35,13 @@ def parse_shapefile(
             raise InvalidShapeFileError(
                 f"The file supplied '{filename}' is an invalid shape file"
             )
+
+        schema = parse_schema(col.schema["properties"])
+
         dataset_row = models.Dataset(
             label=filename,
             description=f"Shape file made from file '{filename}'",
-            schema=None,
+            schema=schema,
         )
         feature_rows = []
         for unique_id, feature in col.items():
@@ -54,3 +67,15 @@ def upload_shapefile(session: Session, filename: str, contents: bytes) -> int:
     session.add_all(feature_rows)
     session.flush()
     return dataset.id
+
+
+def get_dataset_by_id(session: Session, pk: int) -> models.Dataset:
+    try:
+        dataset = session.query(models.Dataset).filter(models.Dataset.id == pk).one()
+    except NoResultFound:
+        raise DatasetNotFoundError(f"Could not find Dataset with pk={pk}")
+    return dataset
+
+
+def get_datasets(session: Session) -> List[models.Dataset]:
+    return session.query(models.Dataset).all()
