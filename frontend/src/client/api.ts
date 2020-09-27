@@ -13,16 +13,10 @@
 
 import * as globalImportUrl from "url";
 import { Configuration } from "./configuration";
-import globalAxios, { AxiosPromise, AxiosInstance } from "axios";
+import globalAxios, { AxiosInstance, AxiosPromise } from "axios";
 // Some imports not used depending on template conditions
 // @ts-ignore
-import {
-  BASE_PATH,
-  COLLECTION_FORMATS,
-  RequestArgs,
-  BaseAPI,
-  RequiredError,
-} from "./base";
+import { BASE_PATH, BaseAPI, RequestArgs, RequiredError } from "./base";
 
 /**
  *
@@ -124,19 +118,6 @@ export interface Layer {
    * @memberof Layer
    */
   group: string;
-}
-/**
- *
- * @export
- * @interface ShapeUploaded
- */
-export interface ShapeUploaded {
-  /**
-   *
-   * @type {string}
-   * @memberof ShapeUploaded
-   */
-  dataset_href: string;
 }
 /**
  *
@@ -468,7 +449,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       shapeFile: any,
       options?: any
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShapeUploaded>
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Dataset>
     > {
       const localVarAxiosArgs = await DefaultApiAxiosParamCreator(
         configuration
@@ -544,7 +525,7 @@ export const DefaultApiFactory = function (
     uploadShapeDatasetsShapefilePost(
       shapeFile: any,
       options?: any
-    ): AxiosPromise<ShapeUploaded> {
+    ): AxiosPromise<Dataset> {
       return DefaultApiFp(configuration)
         .uploadShapeDatasetsShapefilePost(shapeFile, options)
         .then((request) => request(axios, basePath));

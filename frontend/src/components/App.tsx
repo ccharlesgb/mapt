@@ -8,7 +8,7 @@ function App() {
   return (
     <ThemeProvider
       options={{
-        primary: "#F9423A",
+        primary: "#88B04B",
         secondary: "#34cfff",
         error: "#ff9b34",
       }}

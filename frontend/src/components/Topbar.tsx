@@ -5,9 +5,11 @@ import {
   TopAppBarRow,
   TopAppBarSection,
   TopAppBarTitle,
+  TopAppBarActionItem,
 } from "@rmwc/top-app-bar";
 import "rmwc/dist/styles";
 import autoBind from "react-autobind";
+import { Avatar } from "@rmwc/avatar";
 
 type TopbarState = {};
 
@@ -27,6 +29,9 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           <TopAppBarRow>
             <TopAppBarSection>
               <TopAppBarTitle>Mapt</TopAppBarTitle>
+            </TopAppBarSection>
+            <TopAppBarSection alignEnd>
+              <Avatar name="Test User"></Avatar>
             </TopAppBarSection>
           </TopAppBarRow>
         </TopAppBar>

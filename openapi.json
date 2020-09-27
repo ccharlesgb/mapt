@@ -18,7 +18,9 @@
                 "schema": {
                   "title": "Response Get Layers Layers  Get",
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/Layer" }
+                  "items": {
+                    "$ref": "#/components/schemas/Layer"
+                  }
                 }
               }
             }
@@ -46,7 +48,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ShapeUploaded" }
+                "schema": {
+                  "$ref": "#/components/schemas/Dataset"
+                }
               }
             }
           },
@@ -54,7 +58,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -68,7 +74,10 @@
         "parameters": [
           {
             "required": true,
-            "schema": { "title": "Dataset Id", "type": "integer" },
+            "schema": {
+              "title": "Dataset Id",
+              "type": "integer"
+            },
             "name": "dataset_id",
             "in": "path"
           }
@@ -78,7 +87,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Dataset" }
+                "schema": {
+                  "$ref": "#/components/schemas/Dataset"
+                }
               }
             }
           },
@@ -86,7 +97,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -105,7 +118,9 @@
                 "schema": {
                   "title": "Response Get All Datasets Datasets  Get",
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/Dataset" }
+                  "items": {
+                    "$ref": "#/components/schemas/Dataset"
+                  }
                 }
               }
             }
@@ -121,9 +136,18 @@
         "required": ["name", "display", "type"],
         "type": "object",
         "properties": {
-          "name": { "title": "Name", "type": "string" },
-          "display": { "title": "Display", "type": "string" },
-          "type": { "title": "Type", "type": "string" }
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "display": {
+            "title": "Display",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
         }
       },
       "Body_upload_shape_datasets_shapefile__post": {
@@ -143,12 +167,20 @@
         "required": ["label", "description", "schema"],
         "type": "object",
         "properties": {
-          "label": { "title": "Label", "type": "string" },
-          "description": { "title": "Description", "type": "string" },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
           "schema": {
             "title": "Schema",
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Attribute" }
+            "items": {
+              "$ref": "#/components/schemas/Attribute"
+            }
           }
         }
       },
@@ -159,7 +191,9 @@
           "detail": {
             "title": "Detail",
             "type": "array",
-            "items": { "$ref": "#/components/schemas/ValidationError" }
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
           }
         }
       },
@@ -168,17 +202,18 @@
         "required": ["id", "label", "group"],
         "type": "object",
         "properties": {
-          "id": { "title": "Id", "type": "integer" },
-          "label": { "title": "Label", "type": "string" },
-          "group": { "title": "Group", "type": "string" }
-        }
-      },
-      "ShapeUploaded": {
-        "title": "ShapeUploaded",
-        "required": ["dataset_href"],
-        "type": "object",
-        "properties": {
-          "dataset_href": { "title": "Dataset Href", "type": "string" }
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "group": {
+            "title": "Group",
+            "type": "string"
+          }
         }
       },
       "ValidationError": {
@@ -189,10 +224,18 @@
           "loc": {
             "title": "Location",
             "type": "array",
-            "items": { "type": "string" }
+            "items": {
+              "type": "string"
+            }
           },
-          "msg": { "title": "Message", "type": "string" },
-          "type": { "title": "Error Type", "type": "string" }
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
         }
       }
     }

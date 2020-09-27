@@ -24,6 +24,7 @@ class Attribute(BaseModel):
 
 
 class Dataset(BaseModel):
+    id: int
     label: str
     description: str
     schema_: List[Attribute] = Field(..., alias="schema")
@@ -32,8 +33,8 @@ class Dataset(BaseModel):
         orm_mode = True
 
 
-@router.post("/shapefile/", response_model=ShapeUploaded)
-def upload_shape(request: Request, shape_file: UploadFile = File(...)) -> ShapeUploaded:
+@router.post("/shapefile/", response_model=Dataset)
+def upload_shape(request: Request, shape_file: UploadFile = File(...)) -> Dataset:
     """
     Upload a new shape file
 
@@ -42,8 +43,8 @@ def upload_shape(request: Request, shape_file: UploadFile = File(...)) -> ShapeU
     """
     contents = shape_file.file.read()
     with request.app.database.session_scope() as session:
-        upload_shapefile(session, shape_file.filename, contents)
-    return ShapeUploaded(dataset_href="/datasets/1")
+        pk = upload_shapefile(session, shape_file.filename, contents)
+        return Dataset.from_orm(get_dataset_by_id(session, pk))
 
 
 @router.get("/{dataset_id}", response_model=Dataset)
